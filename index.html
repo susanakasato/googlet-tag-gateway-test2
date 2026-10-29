@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste do Google Tag Gateway</title>
+    <!-- Importando uma fonte moderna do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '/gtg-example'+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','');</script>
+    <!-- End Google Tag Manager -->
+    <style>
+        /* Estilos base */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        /* Container do Card */
+        .card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .card h1 {
+            font-size: 24px;
+            margin-top: 0;
+            color: #1e293b;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* Botão Moderno */
+        .btn-teste {
+            background-color: #6366f1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            width: 100%;
+        }
+
+        .btn-teste:hover {
+            background-color: #4f46e5;
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-teste:active {
+            transform: translateY(0);
+        }
+
+        /* Console visual do dataLayer */
+        .console-output {
+            margin-top: 25px;
+            background-color: #1e293b;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            text-align: left;
+            overflow-x: auto;
+            display: none; /* Escondido até o primeiro clique */
+        }
+
+        .console-output span.label {
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Teste GTG / GTM</h1>
+        <p>Clique no botão abaixo para simular uma ação de usuário e disparar um evento customizado direto no <strong>dataLayer</strong>.</p>
+        
+        <button id="btnDisparar" class="btn-teste">Disparar Evento Teste</button>
+
+        <!-- Área para mostrar o que foi para o dataLayer -->
+        <div id="consoleLog" class="console-output">
+            <span class="label">Último evento no dataLayer:</span>
+            <pre id="jsonOutput" style="margin: 0;"></pre>
+        </div>
+    </div>
+
+    <!-- Script de inicialização e disparo -->
+    <script>
+        // 1. Inicializa o dataLayer caso ele ainda não exista
+        window.dataLayer = window.dataLayer || [];
+
+        // 2. Seleciona os elementos da tela
+        const botao = document.getElementById('btnDisparar');
+        const consoleLog = document.getElementById('consoleLog');
+        const jsonOutput = document.getElementById('jsonOutput');
+
+        // 3. Adiciona a ação de clique no botão
+        botao.addEventListener('click', function(e) {
+            e.preventDefault(); // Evita qualquer comportamento padrão do botão
+
+            // Cria o objeto do evento
+            const eventoDatalayer = {
+                'event': 'gtg_test_click',
+                'button_name': 'disparar_evento_teste',
+                'page_type': 'ambiente_de_teste',
+                'timestamp': new Date().toISOString()
+            };
+
+            // Dispara o evento para o dataLayer
+            window.dataLayer.push(eventoDatalayer);
+
+            // ---- Código apenas para feedback visual na tela ----
+            consoleLog.style.display = 'block';
+            
+            // Pega o último item inserido no dataLayer e mostra na tela formatado
+            const ultimoEvento = window.dataLayer[window.dataLayer.length - 1];
+            jsonOutput.textContent = JSON.stringify(ultimoEvento, null, 2);
+            
+            // Também exibe no console nativo do navegador para conferência
+            console.log("Evento enviado para o dataLayer:", ultimoEvento);
+        });
+    </script>
+</body>
+</html>
